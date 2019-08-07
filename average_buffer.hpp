@@ -5,7 +5,7 @@ class AverageBuffer
 {
     T *buffer;
     int bufferSize, currIndex, numForever; // The idea to keep the average and not the amount for overflow fear
-    T avgBuffer, foreverAvg;
+    double avgBuffer, foreverAvg;
 
 public:
     AverageBuffer(int bufferSize) : buffer(new T[bufferSize]), bufferSize(bufferSize)
@@ -15,12 +15,12 @@ public:
 
     ~AverageBuffer() { delete[] buffer; }
 
-    T getAverage()
+    double getAverage()
     {
         return avgBuffer;
     }
 
-    T getAverageForever()
+    double getAverageForever()
     {
         return foreverAvg;
     }
