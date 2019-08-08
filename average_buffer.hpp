@@ -3,7 +3,6 @@
 template <typename T>
 class AverageBuffer
 {
-public:
     T *buffer;
     int bufferSize, currIndex, upperIndex, lowerIndex, numForever;
     double BufferAvg, foreverAvg, upperAvg, lowerAvg;
