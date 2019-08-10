@@ -11,8 +11,8 @@ template <typename T>
 class AverageBuffer
 {
     T *buffer;
-    int bufferSize, currentIndex, upperIndex, lowerIndex, numForever;
-    double bufferAvg, foreverAvg, upperAvg, lowerAvg; // I chose to keep the averages in double type to fit all types of Buffers
+    int bufferSize, currentIndex, upperIndex, lowerIndex, numForever; // numForever - count the samples since the buffer run
+    double bufferAvg, foreverAvg, upperAvg, lowerAvg;                 // I chose to keep the averages in double type to fit all types of Buffers
 
 public:
     AverageBuffer(const int &bufferSize) : bufferSize(bufferSize)
