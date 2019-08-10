@@ -1,17 +1,14 @@
 #define QUARTER 4
 
 template <typename T>
-class AverageBuffer
-{
-    public:
+class AverageBuffer {
     T *buffer;
     int bufferSize, currIndex, upperIndex, lowerIndex, numForever;
     double BufferAvg, foreverAvg, upperAvg, lowerAvg;
 
 
 public:
-    AverageBuffer(const int& bufferSize) : buffer(new T[bufferSize]), bufferSize(bufferSize)
-    {
+    AverageBuffer(const int& bufferSize) : buffer(new T[bufferSize]), bufferSize(bufferSize) {
         initializeGlobal();
     }
 
@@ -54,8 +51,7 @@ private:
         }
     }
 
-    void updateUpperAverage(const T &newVal)
-    {
+    void updateUpperAverage(const T &newVal) {
         if (numForever < bufferSize) {
             if ((numForever + 1) % QUARTER == 0) {   // The quarter is growing, Need add new value to Upper Average
                 upperAvg = (upperAvg * (numForever / QUARTER) + newVal) / ((numForever + 1) / QUARTER);
