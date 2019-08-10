@@ -1,5 +1,9 @@
 #define QUARTER 4
 
+
+
+class InvalidSizeException{};
+
 /*
 The main idea is maintain correct averages at each entry of a new number, so no loops are needed,
 therefore by minor Mathematical Calculations the performance and complexity are significantly better
@@ -16,7 +20,7 @@ public:
     AverageBuffer(const int &bufferSize) : bufferSize(bufferSize)
     {
         if (bufferSize < 1)
-            throw "Buffer size have to be at least 1!";
+            throw InvalidSizeException();
         initializeGlobal();
     }
 
