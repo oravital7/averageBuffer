@@ -1,8 +1,6 @@
 #define QUARTER 4
 
-
-
-class InvalidSizeException{};
+class InvalidSizeException {};
 
 /*
 The main idea is maintain correct averages at each entry of a new number, so no loops are needed,
