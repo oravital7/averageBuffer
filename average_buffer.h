@@ -13,8 +13,10 @@ class AverageBuffer
     double bufferAvg, foreverAvg, upperAvg, lowerAvg; // I chose to keep the averages in double type to fit all types of Buffers
 
 public:
-    AverageBuffer(const int &bufferSize) : buffer(new T[bufferSize]), bufferSize(bufferSize)
+    AverageBuffer(const int &bufferSize) : bufferSize(bufferSize)
     {
+        if (bufferSize < 1)
+            throw "Buffer size have to be at least 1!";
         initializeGlobal();
     }
 
@@ -41,52 +43,44 @@ public:
 
     void clear()
     {
-        initializeGlobal();
         delete[] buffer; // The question require to clear the buffer, delete action seems be more effective
-        buffer = new T[bufferSize];
+        initializeGlobal();
     }
 
 private:
     void updateLowerAverage()
     {
+        int currentQuarter = numForever < bufferSize ? (numForever + 1) / QUARTER : bufferSize / QUARTER;
+
         if (numForever < bufferSize)
         {
-            if ((numForever + 1) % QUARTER == 0)  // The quarter is growing, Need add new value to Lower Average
-            { 
-                lowerAvg = (lowerAvg * (numForever / QUARTER) + buffer[lowerIndex]) / ((numForever + 1) / QUARTER);
+            if ((numForever + 1) % QUARTER == 0) // The quarter is growing, Need add new value to Lower Average
+            {
+                lowerAvg = (lowerAvg * (numForever / QUARTER) + buffer[lowerIndex]) / currentQuarter;
                 circularIndex(lowerIndex);
             }
         }
-        else  // Need add and replace old value by new value to Lower Average
-        { 
-            lowerAvg += (buffer[lowerIndex] - buffer[currentIndex]) / (bufferSize / QUARTER);
+        else if (currentQuarter != 0) // Need add and replace old value by new value to Lower Average
+        {
+            lowerAvg += (buffer[lowerIndex] - buffer[currentIndex]) / currentQuarter;
             circularIndex(lowerIndex);
         }
     }
 
     void updateUpperAverage(const T &newVal)
     {
-        if (numForever < bufferSize)
+        int currentQuarter = numForever < bufferSize ? (numForever + 1) / QUARTER : bufferSize / QUARTER;
+
+        if (numForever < bufferSize && ((numForever + 1) % QUARTER == 0)) // The quarter is growing, Need add new value to Upper Average
         {
-            if ((numForever + 1) % QUARTER == 0)  // The quarter is growing, Need add new value to Upper Average
-            { 
-                upperAvg = (upperAvg * (numForever / QUARTER) + newVal) / ((numForever + 1) / QUARTER);
-            }
-            else if ((numForever + 1) / QUARTER != 0) // Need add and replace old value by new value to Upper Average
-            { 
-                upperAvg += (newVal - buffer[upperIndex]) / ((numForever + 1) / QUARTER);
-                circularIndex(upperIndex);
-            }
-            else // There is no quarter yet
-            { 
-                circularIndex(upperIndex);
-            }
+            upperAvg = (upperAvg * (numForever / QUARTER) + newVal) / currentQuarter;
+            return; // There is no need to move the index
         }
-        else  // Need add and replace old value by new value to Upper Average
-        { 
-            upperAvg += (newVal - buffer[upperIndex]) / (bufferSize / QUARTER);
-            circularIndex(upperIndex);
+        else if (currentQuarter != 0) // Need add and replace old value by new value to Upper Average except that case there is no quarter at all
+        {
+            upperAvg += (newVal - buffer[upperIndex]) / currentQuarter;
         }
+        circularIndex(upperIndex);
     }
 
     // Update Buffer and forever averages
@@ -105,6 +99,7 @@ private:
 
     void initializeGlobal()
     {
+        buffer = new T[bufferSize];
         foreverAvg = bufferAvg = upperAvg = lowerAvg = 0;
         currentIndex = upperIndex = lowerIndex = 0;
         numForever = 0;
