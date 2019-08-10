@@ -3,7 +3,7 @@
 class InvalidSizeException {};
 
 /*
-The main idea is maintain correct averages at each entry of a new number, so no loops are needed,
+The main idea is to maintain correct averages at each entry of a new number, so no loops are needed,
 therefore by minor Mathematical Calculations the performance and complexity are significantly better
 for any size of buffer.
 */
@@ -32,7 +32,7 @@ public:
 
     double getLowerQuarterAverage() const { return lowerAvg; }
 
-    // When a new number entered, we will update the averages accordingly
+    // When a new number is entered, we will update the averages accordingly
     void addSample(const T &newVal)
     {
         updateLowerAverage();
@@ -45,7 +45,7 @@ public:
 
     void clear()
     {
-        delete[] buffer; // The question require to clear the buffer, delete action seems be more effective
+        delete[] buffer;
         initializeGlobal();
     }
 
@@ -56,13 +56,13 @@ private:
 
         if (numForever < bufferSize)
         {
-            if ((numForever + 1) % QUARTER == 0) // The quarter is growing, Need add new value to Lower Average
+            if ((numForever + 1) % QUARTER == 0) // The quarter is growing, Need to add new value to Lower Average
             {
                 lowerAvg = (lowerAvg * (numForever / QUARTER) + buffer[lowerIndex]) / currentQuarter;
                 circularIndex(lowerIndex);
             }
         }
-        else if (currentQuarter != 0) // Need add and replace old value by new value to Lower Average
+        else if (currentQuarter != 0) // Need to add and replace the old value by the new value to Lower Average
         {
             lowerAvg += (buffer[lowerIndex] - buffer[currentIndex]) / currentQuarter;
             circularIndex(lowerIndex);
@@ -73,12 +73,12 @@ private:
     {
         int currentQuarter = numForever < bufferSize ? (numForever + 1) / QUARTER : bufferSize / QUARTER;
 
-        if (numForever < bufferSize && ((numForever + 1) % QUARTER == 0)) // The quarter is growing, Need add new value to Upper Average
+        if (numForever < bufferSize && ((numForever + 1) % QUARTER == 0)) // The quarter is growing, Need to add new value to Upper Average
         {
             upperAvg = (upperAvg * (numForever / QUARTER) + newVal) / currentQuarter;
             return; // There is no need to move the index
         }
-        else if (currentQuarter != 0) // Need add and replace old value by new value to Upper Average except that case there is no quarter at all
+        else if (currentQuarter != 0) // Need to add and replace the old value by new value to Upper Average except that case there is no quarter at all
         {
             upperAvg += (newVal - buffer[upperIndex]) / currentQuarter;
         }
